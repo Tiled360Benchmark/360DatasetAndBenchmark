@@ -74,11 +74,13 @@ function Transcode {
 
 	if ($height -eq 0)
 	{
-		$output = ffmpeg -benchmark -hide_banner -i $in -c:v $codec -qp $qp -preset $preset -g $gop -movflags faststart $out 2>&1 | Out-String
+		$output = ffmpeg -benchmark -hide_banner -vsync passthrough -hwaccel cuda -hwaccel_output_format cuda `
+					-i $in -c:v $codec -qp $qp -b:v 0 -preset $preset -rc constqp -g $gop -movflags faststart $out 2>&1 | Out-String
 	}
 	else
 	{
-		$output = ffmpeg -benchmark -hide_banner -i $in -vf scale=-2:$height -c:v $codec -qp $qp -preset $preset -g $gop -movflags faststart $out 2>&1 | Out-String
+		$output = ffmpeg -benchmark -hide_banner -vsync passthrough -hwaccel cuda -hwaccel_output_format cuda `
+					-i $in -vf "hwupload,scale_cuda=-2:$height" -c:v $codec -qp $qp -b:v 0 -preset $preset -rc constqp -g $gop -movflags faststart $out 2>&1 | Out-String
 	}
 
 	# Extract the encoding time

@@ -8,6 +8,7 @@ param(
 	# Inserts a key frame every $segmentGOP frames
 	[Parameter(Mandatory=$true)][int] $segmentGOP,
     # The directory where the VMAF logs will be saved to
+	# libvmaf requires the / path separator, even on Windows. Do not use \ in this parameter.
     [Parameter(Mandatory=$true)][String] $logsDirectory,
 	# The path and filename of the CSV file that contains the results
 	[Parameter(Mandatory=$true)][String] $outputFile
