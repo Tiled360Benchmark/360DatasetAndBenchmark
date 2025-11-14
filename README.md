@@ -2,7 +2,7 @@
 
 This repository contains the software developped for the paper *Benchmarking Hardware Encoding for Live 360° Video Tiled Streaming*.
 
-[Access the data generated during this benchmark](https://github.com/RDO360/NVENCBenchmarkData).
+[Access the data generated during this benchmark](https://github.com/Tiled360Benchmark/NVENCBenchmarkData).
 
 If you use any part of this repository, please [cite our work](#citation).
 
