@@ -15,7 +15,7 @@ args = parser.parse_args()
 frame = pandas.read_csv(args.data)
 frame = frame.groupby("input_file", as_index=False).mean(numeric_only=True)
 
-pyplot.figure(figsize=(3.25, 2.5))
+pyplot.figure(figsize=(5.5, 2.5))
 
 i = 0
 
@@ -30,5 +30,5 @@ for tile in frame["input_file"].unique():
 pyplot.xlabel("Mean SI")
 pyplot.ylabel("Mean TI")
 
-pyplot.legend(title="Video Name and Tile ID", bbox_to_anchor=(1, 1), loc="upper left", prop={"size": 8}, title_fontsize=8)
+pyplot.legend(title="Video Name and Tile ID", ncols=3, bbox_to_anchor=(0.45, -1), loc="lower center", prop={"size": 8}, title_fontsize=8)
 pyplot.savefig(args.figure, bbox_inches="tight")
