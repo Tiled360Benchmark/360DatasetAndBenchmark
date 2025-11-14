@@ -1,6 +1,6 @@
 # NVENC Benchmark
 
-This repository contains the software developped for the paper *Benchmarking Hardware Encoding for Live 360° Video Tiled Streaming*.
+This repository contains the software developped for the paper *Benchmarking Hardware Encoding for Live 360° Video Tiled Streaming With Our Long-duration 8K Dataset*.
 
 [Access the data generated during this benchmark](https://github.com/Tiled360Benchmark/NVENCBenchmarkData).
 
@@ -12,12 +12,11 @@ To run the [experiments](#experiments) :
 
 1. Install [FFmpeg](https://ffmpeg.org/).
 1. Install [Powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell).
-1. To run the [Spatial and Temporal Information experiment](#spatial-and-temporal-information), install [siti-tools](https://github.com/VQEG/siti-tools#requirements).
+1. To run the [Spatial and Temporal Information experiment](#spatial-and-temporal-information), also install [siti-tools](https://github.com/VQEG/siti-tools#requirements).
 
 To generate the [plots](#analysis) :
 
-1. Install the latest version of [Python 3.12](https://www.python.org/downloads/).
-1. [Install the uv package manager](https://github.com/astral-sh/uv).
+1. [Install the uv package manager](https://docs.astral.sh/uv/getting-started/installation/). It will download the right version of Python automatically.
 1. Install the required Python packages using `uv sync`.
 
 ## Experiments
@@ -29,30 +28,44 @@ A description of each script parameters is available inside the script.
 
 This script calculates the spatial and temporal information of videos according to the [ITU-T P.910 (07/2022) recommendation](https://www.itu.int/rec/T-REC-P.910-202207-I/en) using the [reference software](https://github.com/VQEG/siti-tools).
 
-#### Example usage :
-
 ```powershell
 siTi.ps1 -tiles "tile1.y4m", "tile2.y4m" -resultsFile sitiTiles.csv
 ```
 
-### Bitrate and Visual Quality Benchmark
+### Bitrate, Visual Quality and Encoding Speed Benchmark
 
-This script evaluates the bitrate and visual quality of videos with differents encoding parameters.
-
-#### Example usage :
+This script evaluates the bitrate, visual quality and encoding time of videos with different encoding parameters.
+First, generate the tasks to be performed.
 
 ```powershell
-bitrateVmaf.ps1 -tiles "tile1.y4m", "tile2.y4m" -codecs "h264_nvenc", "hevc_nvenc" -presets "p1", "p2" -qps 18, 20 -heights 0, 320 -segmentTime 2 -segmentGOP 60 -segmentDirectory ".\segments" -dataFile data.csv -vmafLogDirectory "vmafLogs"
+generateCombinations.ps1 -tiles "tile1.y4m", "tile2.y4m" -codecs "h264_nvenc", "hevc_nvenc" -presets p1, p2 -qps 18, 20 -heights 0, 320 -outputFile tasks.csv
 ```
 
-### Encoding Speed Benchmark
-
-This script evaluates the time needed to encode the segments of the videos with different encoding parameters.
-
-#### Example Usage
+Then, start the benchmark.
 
 ```powershell
-encodingSpeed.ps1 -tiles "tile1.y4m", "tile2.y4m" -codecs "h264_nvenc", "hevc_nvenc" -presets "p1", "p2" -cqs 18, 20 -heights 0, 320 -repetitions 5 -segmentTime 2 -segmentGOP 60 -segmentDirectory ".\segment" -dataFile data.csv
+bitrateVmafEncodingTime.ps1 -inputFile tasks.csv -segmentTime 2 -segmentGOP 60 -logsDirectory ".\vmafLogs" -outputFile bitrateVmafEncodingTime.csv
+```
+
+If the benchmark stops for any reason, you may restart it again by using the incomplete output file (here `bitrateVmafEncodingTime.csv`) as the input file.
+The script will automatically resume the execution of the remaining tasks.
+
+### Estimation methods
+
+These scripts estimate the future segments' characteristics using the mean of the first N values and the previous N values respectively.
+
+```powershell
+uv run -m src.experiment.estimation.firstNValues bitrateVmafEncodingTime.csv meanVmaf predictedVmaf 10 predictedVmaf.csv
+```
+
+```powershell
+uv run -m src.experiment.estimation.lastNValues bitrateVmafEncodingTime.csv time predictedTime 1 predictedTime.csv
+```
+
+To subsample VMAF results, using to following script.
+
+```powershell
+vmafSubsampling.ps1 -in bitrateVmafEncodingTime.csv -logsDirectory ".\vmafLogs" -subsample 2 -out subsampled.csv
 ```
 
 ## Analysis
@@ -64,7 +77,7 @@ The following analyses are available :
 - Encoding speed (`plotEncodingSpeed.py`)
 - Spatial and temporal information (`plotSiTi.py`)
 - Estimation errors (`plotEstimationError.py`)
-- VMAF computing speed (`plotVmafSpeed`)
+- VMAF computing speed (`plotVmafSpeed.py`)
 
 For usage, see each script in the `analysis` directory.
 

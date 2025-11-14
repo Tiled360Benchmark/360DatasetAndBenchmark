@@ -1,6 +1,8 @@
 param(
 	# The path of the CSV file to read
 	[Parameter(Mandatory=$true)][String] $in,
+    # The VMAF log files
+    [Parameter(Mandatory=$true)][String] $logsDirectory,
     # Compute the VMAF every N frame
     [Parameter(Mandatory=$true)][Int32] $subsample,
     # The path of the CSV file to write
@@ -19,7 +21,7 @@ foreach ($row in $csv)
     $vmaf = 0
 
     # Decode the VMAF log
-    $path = "../vmafLogs/" + $row.vmafLogFile
+    $path = Join-Path -Path $logsDirectory -ChildPath $row.vmafLogFile
     $json = Get-Content -Raw -Path $path | ConvertFrom-Json
     $numFrames = 0
     $i = 0
