@@ -34,6 +34,8 @@ New-Item -ItemType Directory -Path $segmentsDirectory | Out-Null
 # Create the logs directory if it does not exist already
 New-Item -Path $logsDirectory -ItemType Directory -Force | Out-Null
 
+$previousTile = ""
+
 # For each task
 foreach ($task in $tasks)
 {
@@ -49,10 +51,16 @@ foreach ($task in $tasks)
 	$qp = $task.qp
 	$height = $task.height
 
-	# Create the raw segments
-	$rawSegmentsPath = Join-Path -Path $segmentsDirectory -ChildPath "output_%d.y4m"
+	# Create the raw segments if they dont exist already
+	if ($tile -ne $previousTile)
+	{
+		# Delete the previous raw segments
+		Remove-Item "$segmentsDirectory\*" -Force
 
-	ffmpeg -loglevel error -i $tile -f segment -segment_time $segmentTime -reset_timestamps 1 $rawSegmentsPath
+		$rawSegmentsPath = Join-Path -Path $segmentsDirectory -ChildPath "output_%d.y4m"
+
+		ffmpeg -loglevel error -i $tile -f segment -segment_time $segmentTime -reset_timestamps 1 $rawSegmentsPath
+	}
 
 	# Find the amount of segments (ignore segments that are less than $segmentTime by flooring the value)
 	$tileProbe = (Probe $tile).streams[0]
@@ -98,8 +106,10 @@ foreach ($task in $tasks)
 	# Save the CSV results
 	$output | Export-Csv -Path $outputFile -NoTypeInformation -Encoding UTF8 -UseQuotes AsNeeded
 
-	# Delete the videos
-	Remove-Item "$segmentsDirectory\*" -Force
+	# Delete the encoded videos
+	Remove-Item "$segmentsDirectory\*.mp4" -Force
+
+	$previousTile = $tile
 }
 
 # Delete the temporary directory before exiting
