@@ -1,5 +1,5 @@
-data/
-plots/
+/data/
+/plots/
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,powershell,visualstudiocode,python,intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,powershell,visualstudiocode,python,intellij

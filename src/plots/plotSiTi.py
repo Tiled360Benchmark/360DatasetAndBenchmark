@@ -2,7 +2,7 @@ import argparse
 from matplotlib import pyplot
 import pandas
 
-from src.analysis.common.common import markers
+from src.plots.common import markers
 
 # Arguments
 parser = argparse.ArgumentParser(description="Plots the spatial and temporal information of videos.")

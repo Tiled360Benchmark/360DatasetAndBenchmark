@@ -1,7 +1,7 @@
 param(
     # The path and file of the CSV file that specifies the tasks to execute.
 	# It must have the following columns :
-	# tile,segment,codec,preset,qp,height,bitrate,meanVmaf,meanPsnrY,meanPsnrCb,meanPsnrCr,vmafLogFile,time
+	# tile,segment,codec,preset,qp,height,bitrate,meanVmaf,meanPsnrY,meanPsnrCb,meanPsnrCr,logFile,time
     [Parameter(Mandatory=$true)][String] $inputFile,
     # The duration in seconds of each segment
 	[Parameter(Mandatory=$true)][int] $segmentTime,
