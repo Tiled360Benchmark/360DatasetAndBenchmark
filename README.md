@@ -37,19 +37,35 @@ This script evaluates the bitrate, visual quality and the segment's encoding tim
 First, generate the tasks to be performed.
 
 ```powershell
-generateCombinations.ps1 -tiles "tile1.y4m", "tile2.y4m" -codecs "h264_nvenc", "hevc_nvenc" -presets p1, p2 -qps 18, 20 -heights 0, 320 -outputFile tasks.csv
+bitrateVmafSegmentsEncodingTimeTasks.ps1 -tiles "tile1.y4m", "tile2.y4m" -codecs "h264_nvenc", "hevc_nvenc" -presets p1, p2 -qps 18, 20 -heights 0, 320 -outputFile tasks.csv
 ```
 
 Then, start the benchmark.
 
 ```powershell
-bitrateVmafEncodingTime.ps1 -inputFile tasks.csv -segmentTime 2 -segmentGOP 60 -logsDirectory ".\vmafLogs" -outputFile bitrateVmafEncodingTime.csv
+bitrateVmafSegmentsEncodingTime.ps1 -inputFile tasks.csv -segmentTime 2 -segmentGOP 60 -logsDirectory ".\logs" -outputFile bitrateVmafSegmentsEncodingTime.csv
 ```
 
-If the benchmark stops for any reason, you may restart it again by using the incomplete output file (here `bitrateVmafEncodingTime.csv`) as the input file.
+If the benchmark stops for any reason, you may restart it again by using the incomplete output file (here `bitrateVmafSegmentsEncodingTime.csv`) as the input file.
 The script will automatically resume the execution of the remaining tasks.
 
-### Encoding Time
+### Total Encoding Time Benchmark
+
+This script evaluates the time needed to segment and encode the videos with different encoding parameters.
+First, generate the tasks to be performed.
+
+```powershell
+totalEncodingTimeTasks.ps1 -tiles "tile1.y4m", "tile2.y4m" -codecs "h264_nvenc", "hevc_nvenc" -presets p1, p2 -qps 18, 20 -heights 0, 320 -repetitions 5 -outputFile tasks.csv
+```
+
+Then, start the benchmark.
+
+```powershell
+totalEncodingTime.ps1 -inputFile tasks.csv -segmentTime 2 -segmentGOP 60 -outputFile totalEncodingTime.csv
+```
+
+If the benchmark stops for any reason, you may restart it again by using the incomplete output file (here `totalEncodingTime.csv`) as the input file.
+The script will automatically resume the execution of the remaining tasks.
 
 ## Plots
 

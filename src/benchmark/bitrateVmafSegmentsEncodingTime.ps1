@@ -14,6 +14,12 @@ param(
 	[Parameter(Mandatory=$true)][String] $outputFile
 )
 
+# This is required since the "-UseQuotes" option of "Export-Csv" is only available starting from PowerShell 7
+if ($PSVersionTable.PSVersion.Major -lt 7)
+{
+    throw "PowerShell version must be 7 or greater."
+}
+
 # Import the required functions
 . $PSScriptRoot\ffmpegFunctions.ps1
 

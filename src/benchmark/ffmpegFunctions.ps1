@@ -5,7 +5,7 @@
 		Note : not all streams have a bitrate.
 
 	.PARAMETER file
-		The path of the file to probe
+		The path of the file to probe.
 	
 	.OUTPUTS
 		PSCustomObject
@@ -31,6 +31,28 @@ function Probe {
 	}
 
     return $result
+}
+
+<#
+	.DESCRIPTION
+		Returns the number of frames in a video.
+		Note : to reliably get the number of frames, we need to go through the whole file. This takes a while.
+
+	.PARAMETER file
+		The path of the file to probe.
+	
+	.OUTPUTS
+		int The number of frames.
+#>
+function CountFrames {
+    param (
+		[Parameter(Mandatory)][String] $file
+	)
+
+	$numFrames = ffprobe -v error -select_streams v:0 -count_frames -show_entries stream=nb_read_frames -print_format default=nokey=1:noprint_wrappers=1 -i $file
+	$numFrames = [double] $numFrames
+
+    return $numFrames
 }
 
 <#
@@ -132,4 +154,67 @@ function VisualQuality {
 	$results = Get-Content -Raw $log | ConvertFrom-Json
 	
 	return $results
+}
+
+<#
+	.DESCRIPTION
+		Simultaneously segments and encodes a video file and returns the elapsed encoding time.
+
+	.PARAMETER in
+		The file to transcode.
+
+	.PARAMETER codec
+		The codec.
+	
+	.PARAMETER qp
+		The quantization parameter.
+
+	.PARAMETER height
+		The height in pixels.
+
+	.PARAMETER preset
+		The preset.
+
+	.PARAMETER gop
+		The group of pictures (i.e., the frequency of I frames).
+
+	.PARAMETER segmentTime
+		The length of the segments in seconds.
+
+	.PARAMETER out
+		The path and filename of the transcoded video.
+
+	.OUTPUTS
+		double The elapsed encoding time.
+#>
+function SegmentAndTranscode {
+	param(
+		[Parameter(Mandatory)][String] $in,
+		[Parameter(Mandatory)][String] $codec,
+		[Parameter(Mandatory)][int] $qp,
+		[Parameter(Mandatory)][int] $height,
+		[Parameter(Mandatory)][String] $preset,
+		[Parameter(Mandatory)][int] $gop,
+		[Parameter(Mandatory)][int] $segmentTime,
+		[Parameter(Mandatory)][String] $out
+	)
+
+	if ($height -eq 0)
+    {
+        $output = ffmpeg -benchmark -hide_banner -vsync passthrough -hwaccel cuda -hwaccel_output_format cuda `
+					-i $tile -c:v $codec -qp $qp -b:v 0 -preset $preset -rc constqp -g $segmentGOP `
+					-f segment -segment_time $segmentTime -reset_timestamps 1 -movflags faststart $out 2>&1 | Out-String
+    }
+    else
+    {
+        $output = ffmpeg -benchmark -hide_banner -vsync passthrough -hwaccel cuda -hwaccel_output_format cuda `
+					-i $tile -vf "hwupload,scale_cuda=-2:$height" -c:v $codec -qp $qp -b:v 0 -preset $preset -rc constqp -g $segmentGOP `
+					-f segment -segment_time $segmentTime -reset_timestamps 1 -movflags faststart $out 2>&1 | Out-String
+    }
+
+	# Extract the encoding time
+	$output -match "rtime=(\d+\.{0,1}\d+)s" | Out-Null
+	$rtime = $matches[1] -as [double]
+
+	return $rtime
 }
