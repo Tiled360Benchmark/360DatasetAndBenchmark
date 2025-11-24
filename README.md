@@ -1,8 +1,8 @@
-# NVENC Benchmark
+# Hardware Encoding Benchmark
 
 This repository contains the software developped for the paper *Benchmarking Hardware Encoding for Live 360° Video Tiled Streaming Using a Novel Long-duration 8K Dataset*.
 
-[Access the data generated during this benchmark](https://github.com/Tiled360Benchmark/NVENCBenchmarkData).
+[Access the data generated during this benchmark](https://github.com/Tiled360Benchmark/BenchmarkData).
 
 If you use any part of this repository, please [cite our work](#citation).
 
