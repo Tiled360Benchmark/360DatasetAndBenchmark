@@ -2,7 +2,7 @@ import argparse
 from matplotlib import pyplot
 import pandas
 
-from src.plots.common import markers
+import src.plots.common as common
 
 # Arguments
 parser = argparse.ArgumentParser(description="Plots the spatial and temporal information of videos.")
@@ -21,7 +21,7 @@ i = 0
 
 for tile in frame["input_file"].unique():
     series = frame.query("input_file == @tile")
-    marker = markers[i % len(markers)]
+    marker = common.markers[i % len(common.markers)]
 
     pyplot.scatter(x=series.si, y=series.ti, label=tile, marker=marker, s=50)
 
