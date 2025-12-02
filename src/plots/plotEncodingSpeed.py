@@ -7,7 +7,7 @@ import src.plots.common as common
 from src.plots.keyPairArg import parseKeyPair
 
 # Arguments
-parser = argparse.ArgumentParser(description="Plots the encoding speed in frames per second of different codecs and presets. Produces one figure for each codec and resolution combination.")
+parser = argparse.ArgumentParser(description="Plots the encoding speed in frames per second of different codecs, presets and resolutions.")
 parser.add_argument("data", help="Path of the CSV file with the encoding time.")
 parser.add_argument("figure", help="Path and filename of the figure.")
 parser.add_argument("--heightLabels", nargs="+", help="The labels for the resolutions in key-value pairs (e.g. 0='Label 1' 500='Label 2').")
