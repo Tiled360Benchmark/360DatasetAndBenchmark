@@ -1,5 +1,6 @@
 import argparse
 from matplotlib import pyplot
+import matplotlib
 import numpy
 import pandas
 
@@ -27,6 +28,8 @@ tiles = frame.tile.unique()
 heights = frame.height.unique()
 codecs = frame.codec.unique()
 
+matplotlib.rcParams["hatch.linewidth"] = 0.5
+
 figure, axes = pyplot.subplots(4, 5, constrained_layout=True, sharey=True)
 figure.set_size_inches(12, 6.25)
 
@@ -46,8 +49,9 @@ for i, tile in enumerate(tiles):
             y = series.speed
 
             color = common.colors[m % len(common.colors)]
+            hatch = common.hatches[m % len(common.hatches)]
             
-            line = axis.bar(x + (width * m), y, width, color=color, label=f"{codec} {heightLabels[height]}")
+            line = axis.bar(x + (width * m), y, width, color=color, hatch=hatch, label=f"{codec} {heightLabels[height]}")
 
             if (i == 0):
                 lines.append(line)
