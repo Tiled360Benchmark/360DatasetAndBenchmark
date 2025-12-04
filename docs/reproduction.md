@@ -1,35 +1,37 @@
-# Benchmark Data
+# Reproducting our Benchmark
+
+[Download the 360° video dataset and the benchmark data](https://dx.doi.org/10.21227/6htp-py25)
+
+If you use any part of this dataset, please [cite our work](../README.md#citation) and observe our [ethics code](../README.md#ethics).
 
 To reproduce our results, first [learn how to use our benchmarking software](usage.md).
-
-If you use any part of this dataset, please [cite our work](../README.md#citation) and observe our [ethics code](#ethics).
 
 ## 360° videos
 
 The video material used in our benchmark consists of the following 360° videos that we filmed using an [Insta Pro 2 camera](https://www.insta360.com/product/insta360-pro2).
 
-| Name           | Duration (s) | Cut Video From | Cut Video To | Download Links |
-|:---------------|:------------:|:--------------:|:------------:|:--------------:|
-| BridgeDay      | 248          | 00:00:00.00    | End          | [Unstitched]() <br> [Stitched Monoscopic (2D)]() <br> [Stitched Stereo (3D)]() |
-| BridgeNight    | 761          | 00:00:00.00    | End          | |
-| Cathedral      | 263          | 00:00:02.00    | 00:04:23.00  | |
-| Cats           | 580          | 00:00:10.00    | 00:09:50.00  | |
-| Excavating     | 680          | 00:00:00.00    | 00:11:20.00  | |
-| Fireplace      | 735          | 00:00:04.00    | 00:12:19.00  | |
-| Forest         | 401          | 00:00:00.00    | 00:06:41.00  | |
-| Mowing         | 599          | 00:00:00.00    | 00:09:59.00  | |
-| Muffins        | 1207         | 00:00:02.00    | 00:20:08.00  | |
-| Quad           | 901          | 00:00:00.00    | End          | |
-| Raking         | 732          | 00:00:05.00    | 00:12:17.00  | |
-| Running        | 309          | 00:00:01.00    | 00:05:09.00  | |
-| SuburbDay      | 287          | 00:00:02.00    | 00:04:49.00  | |
-| SuburbNight    | 287          | 00:00:00.00    | 00:04:47.00  | |
-| Swing          | 303          | 00:00:00.00    | 00.05:03.00  | |
-| Train          | 349          | 00:00:00.00    | End          | |
-| Turkeys        | 642          | 00:00:23.00    | 00:11:05.00  | |
-| University     | 344          | 00:00:01.00    | 00:05:44.00  | |
-| Vacuuming      | 543          | 00:00:00.00    | 00:09:03.00  | |
-| VirtualReality | 255          | 00:00:07.00    | 00:04:22.00  | |
+| Name           | Duration (s) | Cut Video From | Cut Video To |
+|:---------------|:------------:|:--------------:|:------------:|
+| BridgeDay      | 248          | 00:00:00.00    | End          |
+| BridgeNight    | 761          | 00:00:00.00    | End          |
+| Cathedral      | 263          | 00:00:02.00    | 00:04:23.00  |
+| Cats           | 580          | 00:00:10.00    | 00:09:50.00  |
+| Excavating     | 680          | 00:00:00.00    | 00:11:20.00  |
+| Fireplace      | 735          | 00:00:04.00    | 00:12:19.00  |
+| Forest         | 401          | 00:00:00.00    | 00:06:41.00  |
+| Mowing         | 599          | 00:00:00.00    | 00:09:59.00  |
+| Muffins        | 1207         | 00:00:02.00    | 00:20:08.00  |
+| Quad           | 901          | 00:00:00.00    | End          |
+| Raking         | 732          | 00:00:05.00    | 00:12:17.00  |
+| Running        | 309          | 00:00:01.00    | 00:05:09.00  |
+| SuburbDay      | 287          | 00:00:02.00    | 00:04:49.00  |
+| SuburbNight    | 287          | 00:00:00.00    | 00:04:47.00  |
+| Swing          | 303          | 00:00:00.00    | 00.05:03.00  |
+| Train          | 349          | 00:00:00.00    | End          |
+| Turkeys        | 642          | 00:00:23.00    | 00:11:05.00  |
+| University     | 344          | 00:00:01.00    | 00:05:44.00  |
+| Vacuuming      | 543          | 00:00:00.00    | 00:09:03.00  |
+| VirtualReality | 255          | 00:00:07.00    | 00:04:22.00  |
 
 We stitched the 360° videos in equirectangular projection using the [Insta360 Stitcher 3.1.3 software](https://www.mantis-sub.com/support/) and the following parameters.
 
@@ -73,9 +75,7 @@ We evaluated the spatial information (SI) and temporal information (TI) of the t
 siTi.ps1 -tiles "tile1.y4m", "tile2.y4m", "tile3.y4m", "tile4.y4m", "tile5.y4m", "tile6.y4m", "tile7.y4m", "tile8.y4m", "tile9.y4m", "tile10.y4m", "tile11.y4m", "tile12.y4m", "tile13.y4m", "tile14.y4m", "tile15.y4m", "tile16.y4m", "tile17.y4m", "tile18.y4m", "tile19.y4m", "tile20.y4m", "tile21.y4m", "tile22.y4m", "tile23.y4m", "tile24.y4m", "tile25.y4m", "tile26.y4m", "tile27.y4m", "tile28.y4m", "tile29.y4m", "tile30.y4m", "tile31.y4m", "tile32.y4m", "tile33.y4m", "tile34.y4m", "tile35.y4m", "tile36.y4m" -resultsFile siTiVideo.csv
 ```
 
-<!--TODO Update link-->
-The result files for all videos are available in this repository.
-The files follow this format.
+The results file follows this format.
 
 | Column Name | Description                            |
 |:------------|:---------------------------------------|
@@ -102,13 +102,8 @@ bitrateVmafSegmentsEncodingTimeTasks.ps1 -tiles "bridgeDay24.y4m", "bridgeNight1
 bitrateVmafSegmentsEncodingTime.ps1 -inputFile tasbitrateVmafSegmentsEncodingTimeTasks.csv -segmentTime 2 -segmentGOP 60 -logsDirectory ".\logs" -outputFile bitrateVmafSegmentsEncodingTime.csv
 ```
 
-<!--TODO Update link-->
-The results file for the selected tiles (`bitrateVmafSegmentsEncodingTime.csv`) is available in this repository.
-The file follows this format.
-
-<!--TODO Update link-->
-To get detailed information about the visual quality, download the [VMAF log files]() for all segments.
-Every file contains the PSNR (Y, Cb and Cr), VIF, VMAF and more of every frame.
+The results file follows this format.
+The detailed VMAF logs contain the PSNR (Y, Cb and Cr), VIF, VMAF and more for every frame.
 
 | Column Name | Description                                                                                                                      |
 |:------------|:---------------------------------------------------------------------------------------------------------------------------------|
@@ -144,9 +139,7 @@ totalEncodingTimeTasks.ps1 -tiles "bridgeDay24.y4m", "bridgeNight1.y4m", "cathed
 totalEncodingTime.ps1 -inputFile tasks.csv -segmentTime 2 -segmentGOP 60 -outputFile totalEncodingTime.csv
 ```
 
-<!--TODO Update link-->
-The results file for the selected tiles (`totalEncodingTime.csv`) is available in this repository.
-The file follows this format.
+The results file follows this format.
 
 | Column Name | Description                                                                         |
 |:------------|:------------------------------------------------------------------------------------|
@@ -164,14 +157,3 @@ To visualize the results, we ran the following command.
 ```bash
 uv run -m src.plots.plotEncodingSpeed totalEncodingTime.csv encodingSpeed.pdf --heightLabels 0='8K' 320='4K'
 ```
-
-## Ethics
-
-We have obtained the consent of the recognizable people in the videos to publish the data.
-Follow these rules when using the videos.
-
-- Don't use the videos in illegal, immoral, offensive, misleading or deceptive content.
-- Don't sell or redistribute the videos on other platforms.
-- Don't use the videos in your trade-mark, design-mark, trade-name, business name or service mark.
-- Videos containing recognizable trademarks, logos or brands cannot be used for commercial purposes.
-- Don't imply that any recognizable person or brand in the videos endorses your content or product.
