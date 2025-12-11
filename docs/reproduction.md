@@ -8,7 +8,7 @@ To reproduce our results, first [learn how to use our benchmarking software](usa
 
 ## 360° videos
 
-The video material used in our benchmark consists of the following 360° videos that we filmed using an [Insta Pro 2 camera](https://www.insta360.com/product/insta360-pro2).
+The video material used in our benchmark consists of the following 360° videos that we filmed using an [Insta360 Pro 2 camera](https://www.insta360.com/product/insta360-pro2).
 
 | Name           | Duration (s) | Cut Video From | Cut Video To |
 |:---------------|:------------:|:--------------:|:------------:|
@@ -118,7 +118,6 @@ The detailed VMAF logs contain the PSNR (Y, Cb and Cr), VIF, VMAF and more for e
 | meanPsnrY   | The mean PSNR of the luma component.                                                                                             |
 | meanPsnrCb  | The mean PSNR of the blue-difference chroma component.                                                                           |
 | meanPsnrCr  | The mean PSNR of the red-difference chroma component.                                                                            |
-| logFile     | The name of the VMAF results file for this segment, which includes all supported metrics, such as PSNR and SSIM, for each frame. |
 | time        | The time required to encode this segment in seconds.                                                                             |
 
 To visualize the results, we ran the following command.
