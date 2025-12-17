@@ -1,15 +1,14 @@
 param(
     # The path and file of the CSV file that specifies the tasks to execute.
 	# It must have the following columns :
-	# tile,segment,codec,preset,qp,height,bitrate,meanVmaf,meanPsnrY,meanPsnrCb,meanPsnrCr,logFile,time
+	# tile,segment,codec,preset,qp,height,bitrate,meanVmaf,meanPsnrY,meanPsnrCb,meanPsnrCr,time
     [Parameter(Mandatory=$true)][String] $inputFile,
     # The duration in seconds of each segment
 	[Parameter(Mandatory=$true)][int] $segmentTime,
 	# Inserts a key frame every $segmentGOP frames
 	[Parameter(Mandatory=$true)][int] $segmentGOP,
-    # The directory where the VMAF logs will be saved to
-	# libvmaf requires the / path separator, even on Windows. Do not use \ in this parameter.
-    [Parameter(Mandatory=$true)][String] $logsDirectory,
+    # The path and filename of the CSV file that contains the VMAF logs
+    [Parameter(Mandatory=$true)][String] $logsFile,
 	# The path and filename of the CSV file that contains the results
 	[Parameter(Mandatory=$true)][String] $outputFile
 )
@@ -36,9 +35,6 @@ $output = [System.Collections.ArrayList] $tasks
 $segmentsDirectory = [guid]::NewGuid().ToString("N")
 
 New-Item -ItemType Directory -Path $segmentsDirectory | Out-Null
-
-# Create the logs directory if it does not exist already
-New-Item -Path $logsDirectory -ItemType Directory -Force | Out-Null
 
 $previousTile = ""
 
@@ -72,15 +68,15 @@ foreach ($task in $tasks)
 	$tileProbe = (Probe $tile).streams[0]
 	$numSegments = [math]::floor($tileProbe.duration / $segmentTime)
 
+	$logsOutput = @()
+
 	# Encode the segment and get its bitrate and visual quality
 	for ($segment = 0; $segment -lt $numSegments; $segment++)
 	{
 		$referencePath = Join-Path -Path $segmentsDirectory -ChildPath "output_$segment.y4m"
 		$distortedPath = Join-Path -Path $segmentsDirectory -ChildPath "output_$segment.mp4"
-
-		# We can't use Join-Path, since libvmaf only accepts / as a path separator, even on Windows
-		$logFile = "${tile}_${segment}_${codec}_${preset}_${qp}_${height}.json"
-		$logPath = $logsDirectory + "/" + $logFile
+		# We use a JSON log file because libvmaf will calculate the pooled metrics (mean, min, max) for us
+		$logPath = $segmentsDirectory + "/log.json"
 
 		# Transcode the segment
 		$encodingTime = Transcode $referencePath $codec $qp $height $preset $segmentGOP $distortedPath
@@ -88,7 +84,7 @@ foreach ($task in $tasks)
 		# Evaluate it's visual quality
 		$visualQuality = VisualQuality $distortedPath $referencePath $logPath
 
-		# Append the results
+		# Append the encoding data results
 		[void]$output.Add([PSCustomObject]@{
 			tile = $tile
 			segment = $segment
@@ -101,16 +97,34 @@ foreach ($task in $tasks)
 			meanPsnrY = $visualQuality.pooled_metrics.psnr_y.mean
 			meanPsnrCb = $visualQuality.pooled_metrics.psnr_cb.mean
 			meanPsnrCr = $visualQuality.pooled_metrics.psnr_cr.mean
-			vmafLogFile = $logFile
 			time = $encodingTime
 		})
+
+		# Extract and append the VMAF log results
+		$logs = @($visualQuality.frames | ForEach-Object { $_ })
+				| Select-Object -Property frameNum -ExpandProperty metrics
+
+		$logs = $logs | Select-Object `
+			@{Name="tile"; Expression={$tile}}, `
+			@{Name="segment"; Expression={$segment}}, `
+			@{Name="codec"; Expression={$codec}}, `
+			@{Name="preset"; Expression={$preset}}, `
+			@{Name="qp"; Expression={$qp}}, `
+			@{Name="height"; Expression={$height}}, `
+			@{Name = "frame"; Expression = {$_.frameNum}}, `
+			* -ExcludeProperty frameNum
+
+		$logsOutput += $logs
 	}
 
 	# Remove the completed task
 	$output.Remove($task)
 
-	# Save the CSV results
+	# Save the encoding data to CSV
 	$output | Export-Csv -Path $outputFile -NoTypeInformation -Encoding UTF8 -UseQuotes AsNeeded
+
+	# Append the VMAF logs to CSV
+	$logsOutput | Export-Csv -Append -Path $logsFile -NoTypeInformation -Encoding UTF8 -UseQuotes AsNeeded
 
 	# Delete the encoded videos
 	Remove-Item "$segmentsDirectory\*.mp4" -Force
