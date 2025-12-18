@@ -16,7 +16,7 @@ param(
 $output = [System.Text.StringBuilder]::new()
 
 # Write the header of the csv file
-[void]$output.AppendLine("tile,segment,codec,preset,qp,height,bitrate,meanVmaf,meanPsnrY,meanPsnrCb,meanPsnrCr,logFile,time")
+[void]$output.AppendLine("tile,segment,codec,preset,qp,height,bitrate,meanVmaf,meanPsnrY,meanPsnrCb,meanPsnrCr,time")
 
 foreach ($tile in $tiles)
 {
@@ -28,7 +28,7 @@ foreach ($tile in $tiles)
 			{
 				foreach ($height in $heights)
 				{
-                    [void]$output.AppendLine("$tile,,$codec,$preset,$qp,$height,,,,,,,")
+                    [void]$output.AppendLine("$tile,,$codec,$preset,$qp,$height,,,,,,")
                 }
             }
         }
