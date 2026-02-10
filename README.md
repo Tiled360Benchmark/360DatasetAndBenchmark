@@ -2,7 +2,7 @@
 
 This repository contains the data produced and the software developped for the paper *A Comprehensive Long-duration 8K Dataset to Benchmark Hardware Encoding for Live 360° Video Tiled Streaming*.
 
-If you use any part of this repository or dataset, please [cite our work](../README.md#citation) and observe our [ethics code](../README.md#ethics).
+If you use any part of this repository or dataset, please [cite our work](#citation) and observe our [ethics code](#ethics).
 
 ## 360° Video Dataset and Hardware Benchmark Data
 
