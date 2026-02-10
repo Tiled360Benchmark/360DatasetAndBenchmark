@@ -1,4 +1,4 @@
-# Reproducting our Benchmark
+# Reproducing our Benchmark
 
 [Download the 360° video dataset and the benchmark data](https://dx.doi.org/10.21227/6htp-py25)
 
