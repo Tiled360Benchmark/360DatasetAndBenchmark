@@ -1,4 +1,5 @@
 import argparse
+import matplotlib
 from matplotlib import pyplot
 import matplotlib
 import numpy
@@ -7,6 +8,10 @@ import pandas
 from src.plots.bdRate import bdRate
 import src.plots.common as common
 from src.plots.keyPairArg import parseKeyPair
+
+# Use FontType 42 to since its required by ACM
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 
 # Arguments
 parser = argparse.ArgumentParser(description="Plots the BD-rate performance for all tiles, codecs and presets.")

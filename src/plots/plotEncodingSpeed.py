@@ -1,4 +1,5 @@
 import argparse
+import matplotlib
 from matplotlib import pyplot
 import matplotlib
 import numpy
@@ -6,6 +7,10 @@ import pandas
 
 import src.plots.common as common
 from src.plots.keyPairArg import parseKeyPair
+
+# Use FontType 42 to since its required by ACM
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 
 # Arguments
 parser = argparse.ArgumentParser(description="Plots the encoding speed in frames per second of different codecs, presets and resolutions.")

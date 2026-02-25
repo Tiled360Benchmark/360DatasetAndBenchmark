@@ -87,7 +87,7 @@ The results file follows this format.
 To visualize the results, we ran the following command.
 
 ```bash
-uv run -m src.plots.plotSiTi siTi.csv siTi.pdf
+uv run -m src.plots.plotSiTi siTi.csv siTi.pdf --include_only bridgeDay24.y4m bridgeNight1.y4m cathedral20.y4m cats13.y4m excavating1.y4m fireplace3.y4m forest30.y4m mowing33.y4m muffins25.y4m quad32.y4m raking7.y4m running18.y4m suburbDay14.y4m suburbNight16.y4m swing17.y4m train3.y4m turkeys17.y4m university23.y4m vacuuming13.y4m virtualReality29.y4m
 ```
 
 ## Bitrate, Visual Quality and Segment's Encoding Time Benchmark
