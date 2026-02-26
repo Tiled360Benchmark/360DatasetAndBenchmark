@@ -14,7 +14,7 @@ The video material used in our benchmark consists of the following 360° videos 
 |:---------------|:------------:|:--------------:|:------------:|
 | BridgeDay      | 248          | 00:00:00.00    | End          |
 | BridgeNight    | 761          | 00:00:00.00    | End          |
-| Cathedral      | 263          | 00:00:02.00    | 00:04:23.00  |
+| Cathedral      | 261          | 00:00:02.00    | 00:04:23.00  |
 | Cats           | 580          | 00:00:10.00    | 00:09:50.00  |
 | Excavating     | 680          | 00:00:00.00    | 00:11:20.00  |
 | Fireplace      | 735          | 00:00:04.00    | 00:12:19.00  |
